@@ -1,0 +1,18 @@
+Creator and main writer:
+  Tomas Berndtsson <tomas@nocrew.org>
+
+Initial manpage:
+  Taylor C Carpenter <taylorcc@codecafe.com>
+
+PostScript interface, GNU pth support and various bugfixes:
+  Magnus Henoch <mange@freemail.hu>
+
+Patch for little endian image converting:
+  Grzegorz Adam Hankiewicz <gradha@iname.com>
+
+Autoconf/automake work:
+  Guillem Jover <guillem@debian.org>
+
+Thanks for testing, bugfinding, etc.:
+  Bill Thompson
+  Michael Pollard

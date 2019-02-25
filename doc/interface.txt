@@ -1,0 +1,244 @@
+Introduction
+------------
+
+  This textfile describes approximately how to construct your own user
+  interface for Zen. There is a not too difficult API for the
+  interfaces, but some knowledge about the rest of the system is also
+  needed, mainly about the layout parts and their contents. The source
+  code is well documented, and will give you details about each
+  thing. This document is meant to give you a more abstract image of
+  the connection between the main program and the interfaces.
+
+  Please note that the current API, no matter what version of Zen you
+  are reading this file in, is not set to always stay the same. They
+  will change during the development of Zen. Beware.
+
+
+Construction
+------------
+
+  Each interface is compiled as a shared library, which the main
+  program loads. Only one interface is loaded when Zen is started,
+  according to what the environment variable ZEN_INTERFACE is set to,
+  or what is specified at the command line.
+
+  The source code for the interfaces are, unfortunately, not separated
+  completely from the rest of the program, because it would lower the
+  performance. This means that new interfaces must be placed in the
+  main source tree to compile. This should not be a big problem.
+
+  The configure script is responsible for figuring out which
+  interfaces that should, and could, be compiled on the current
+  system. This means that new interfaces must be known by the
+  configure script, most notably the variable AVAILABLE_UI must
+  contain a white space separated list of the names of the
+  interfaces. These names must be the same as the names of the
+  directories in `src/ui/', and also the same as the short name,
+  specified within the interface. The configure script should perform
+  the appropriate tests, in order to find out if the interface can be
+  built.
+
+  The definitions and structs used for the interface API are placed in
+  the header file `src/ui/zen_ui.h'.
+
+
+Interface types
+---------------
+
+  The interface API includes a number of variables describing what the
+  interface supports. It is the responsibility of the interface's
+  initialization routine to set these variables. These support values
+  are then used by the rest of the program, in order to change its
+  behaviour in certain occations. These variables are collected in a
+  struct called `struct zen_ui_support'.
+
+  There is one support variable which distinctively separate two
+  different kinds of interfaces, namely the `interaction' support
+  variable. Most interfaces will support interaction, and those that
+  do not are very simple, like the plain text dump interface. The
+  difference between the interactive interface and the non-interactive
+  interface, with respect to the programming, is that the interactive
+  one is always run in its own thread, while with the non-interactive,
+  the whole program will run unthreaded.
+
+  The other variables describe what kinds of parts it understands, and
+  if it can scroll in X and Y directions.
+
+
+Create a new interface
+----------------------
+
+  The easiest way to start developing a new interface, is most likely
+  to copy one of the existing ones and modify it to suit the new
+  needs. Currently, the best interface to start with, is probably the
+  oFBis framebuffer interface. I will use it as an example in this
+  case, and will call the new interface `buddha', which uses the
+  libuddha library.
+
+  So, copy the `src/ui/ofbis' directory to `src/ui/buddha'. You might
+  also want to change the names of the files. Edit configure.in to
+  look for the depending library libuddha, and add "buddha" to
+  AVAILABLE_UI, if it is found. You also need to add the new directory
+  to EXTRA_SUBDIRS in `src/ui/Makefile.am'. This is to ensure that all
+  interfaces are included in a distribution made on machines which
+  might not be able to compile all interfaces.
+
+  Now you are ready to start the hacking. When the main program loads
+  your interface, it will call a function called `init()'. In the
+  oFBis interface, this is placed in the file
+  `src/ui/ofbis/ofbis_init.c'. The initialization function is
+  responible for setting up the set of interface operations, and
+  various interface variables, for example the support variables, and
+  version strings. Not all of these variables are used at present
+  time, but your interface should set them anyway, to ensure the
+  future to be good for all involved. All information about an
+  interface is placed in a variable of type `struct zen_ui'. A pointer
+  to a variable of this type is given to the initialization function
+  of the interface.
+
+  Interface operations, declared in `struct zen_ui_operations', are
+  functions which the main program will call to control or require
+  information from the user interface. In response, the main program
+  contributes with a set of helper functions, which the user inteface
+  can call. An example of these are functions to request a page. These
+  helper functions are available in the struct `struct
+  zen_ui_functions'. 
+
+
+How the interface is used
+-------------------------
+
+  When the main program finds it suitable, it decides to open the
+  interface display, by calling the interface operation `open()'.  For
+  an interactive interface, this is called in a separate thread. The
+  main program will then wait for it to exit. From now on, the
+  interface has control over things. The open operation in the
+  interface, which for the oFBis interface is in
+  `src/ui/ofbis/ofbis_open.c', opens the display it will use, be it
+  the framebuffer, an X window, or whatever else there may be. The
+  libuddha library happens to project vector images on the stomach of
+  a statue of Buddha, using lasers, so it will probably start the
+  laser at this point.
+
+  The opening operation of the interface might be given a URL as
+  argument. This is the URL given at the command line when starting
+  Zen. The interface may choose if it should request this page or not,
+  but it is appreciated to do so, to keep a uniform behaviour. In an
+  interactive interface, a new page is called using the helper
+  function `request_page()'. It then has to poll for the new page in
+  its event loop, using the helper function `poll_page()'. The return
+  value of this is a pointer to a layout part, and not any layout
+  part, but of the page information type. The page information part is
+  always the first part in the page, and all parts making out the
+  visible parts of the page, are placed as child parts to the page
+  information part. All this, and more, can, and should, be studied in
+  detail in `src/layouter/layout.h'.
+
+  In the current design, the page is completely loaded and layouted
+  before it is returned to the user interface. This means that
+  progressive drawing of a page is not supported yet. This will most
+  likely change in the future. 
+
+  While the page is being processed, the different parts of the main
+  program will set a status string to report what it is doing. This
+  string can be read by the interface by using the helper function
+  `get_status()'. This is used as a progress meter, error messages,
+  and other information. It is recommended for the interface to read
+  this status text with regular intervals in the event loop of the
+  interface, and present it somewhere on the display, if it is able
+  to. 
+
+  When the requested page has been returned to the interface, it is
+  time for the interface to render the page on its display. Depending
+  on what the interface support, different kinds of layout parts will
+  be available in the page. 
+
+
+Layout parts and rendering
+--------------------------
+
+  As mentioned above, all layout parts are described in the layout
+  header file. I will try to explain it a bit more closely anyhow, to
+  make sure you understand. 
+
+  A page consists of a linked list of layout parts. Each part have a
+  pointer to the next part in the list, and to the previous part. One
+  or both of these are NULL, if the part is at either end of a
+  list. Besides this, a part can also have a pointer to a child part,
+  which is then the start of a new linked list. Each part which is a
+  child part to another part, has a pointer to its parent
+  part. Examples of parts that have child parts are links, and
+  tables. To simplify, or possibly complicate, further, below is an
+  attempt to present it graphically.
+
+    page
+     |
+  X- text <-> image <-> link <-> text <-> table -X
+                         |                 |
+                         text -X           table_row -X
+                                            |
+                                            table_cell <-> table_cell -X
+                                             |              | 
+                                             text -X        image -X
+  
+  This was a relatively short page, but contains some different parts
+  which serve well as an example. 
+
+  On to the fun part, how to render all this information. The page
+  information part, which is always the first part of the page,
+  contain general information about whole page. For example, this
+  includes the title of the page, and the colour of the
+  background. Colours in Zen are always placed in a 32-bit value, in
+  the form 00rrggbb. Images are special, and are converted into the
+  display's type, to let that work off the interface.
+
+  All layout parts contain an X and Y position along with a width and
+  height. This is relative to the beginning of the page, which means
+  the first part is likely to have an X and Y position of 0, 0. If
+  your interface has a control area on its display, you will have to
+  take that area into account when rendering the parts. You will also
+  have to keep track of scrolling of the page, including checking
+  which parts are inside the actual display area. The oFBis interface
+  contain examples of how to deal with this. The main rendering
+  function in the oFBis interface is placed in the file
+  `src/ui/ofbis/ofbis_render.c'.
+
+  Much in Zen and its layout parts is built on recursive functions,
+  that is functions which call themselves. This is also done in the
+  oFBis interface rendering. A part that has a child part, recurses
+  the render function to use that child part as the beginning of a new
+  linked list of parts. When the child part list has come to an end,
+  the function returns, and the main rendering continues to the next
+  part. 
+
+  Tables recurse with a stop at an extra function, which draws the
+  borders, if they are visible, and then call the rendering function,
+  using the contents of the table cell as base.
+
+
+Handle links
+------------
+
+  As with much else, the interface is free to act its own way
+  regarding links. The oFBis interface creates a linked list of all
+  link parts and the actual parts they consist of. This is used to TAB
+  through the links on the page, and to check if the mouse is
+  activating a link. The link part contains the URL given by the HREF
+  parameter to the anchor tag, which can be used to retrieve a new
+  page, if the link was clicked upon, or selected from the keyboard.
+
+
+End note
+--------
+
+  I realize this is quite a lot of text, and it is difficult for me to
+  know if this description is detailed enough to write a new interface
+  for Zen. I appreciate any comments, questions and suggestions about
+  how to improve this description. I will surely add more information
+  when I can think of it.
+
+
+
+
+             "The reward of studying, lies in the studies themselves."
+                                                           - Konfucius

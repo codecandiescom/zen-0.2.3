@@ -1,0 +1,338 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT([zen], [0.2.3])
+AC_PREREQ([2.57])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_AUX_DIR(config)
+
+dnl Check system type
+AC_CANONICAL_TARGET([])
+
+AM_INIT_AUTOMAKE([foreign 1.7])
+AM_MAINTAINER_MODE
+AC_CONFIG_HEADERS([config.h])
+
+dnl Provide debugging possibilities, otherwise optimise.
+OPTIMISE_CFLAGS="-O2 -g"
+WARNING_CFLAGS="-Wall -Werror"
+AC_ARG_ENABLE([debug],
+    [  --enable-debug          Compile with debug information],
+    [AC_DEFINE([DEBUG], 1, [Define if debugging was enabled.])])
+
+dnl Provide test coverage possibility. This is a gcc specific option. 
+AC_ARG_ENABLE([test-coverage],
+    [  --enable-test-coverage  Compile with gcov test coverage support
+                          Only usable with gcc. Imply debugging.],
+    [PROFILE_CFLAGS="-fprofile-arcs -ftest-coverage"
+     OPTIMISE_CFLAGS="-g"
+     AC_DEFINE([DEBUG], 1, [Define if debugging was enabled.])])
+
+dnl Profiling does not work with shared libraries, so until I
+dnl fix Zen to compile statically, this will not be available
+dnl for the interfaces, but only for the main program.
+AC_ARG_ENABLE([profile],
+    [  --enable-profile        Compile with profiling debug information],
+    [PROFILE_CFLAGS="-pg"
+     WARNING_CFLAGS="-Wall"])
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+
+dnl Check if compiler supports -Wno-strict-aliasing
+AC_MSG_CHECKING([whether the C compiler accepts -Wno-strict-aliasing])
+OLD_CFLAGS="$CFLAGS"
+CFLAGS="-Wno-strict-aliasing"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])], 
+    [WARNING_CFLAGS="$WARNING_CFLAGS -Wno-strict-aliasing"
+     AC_MSG_RESULT(yes)],
+    [AC_MSG_RESULT(no)])
+CFLAGS="$OLD_CFLAGS"
+
+AC_SUBST(WARNING_CFLAGS)
+AC_SUBST(OPTIMISE_CFLAGS)
+AC_SUBST(PROFILE_CFLAGS)
+
+dnl Setup some platform dependant things.
+case "$target_os" in
+    netbsd*) CPPFLAGS="${CPPFLAGS} -I/usr/pkg/include";
+             LDFLAGS="${LDFLAGS} -L/usr/pkg/lib -Wl,-R/usr/pkg/lib";
+             ;;
+esac
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([getopt.h pthread.h strings.h])
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl This is not a good check, because the types short and int are
+dnl not specified to the correct sizes.
+dnl Better checking will be made later.
+AC_CHECK_HEADER([inttypes.h],
+ AC_DEFINE([HAVE_INTTYPES_H], 1, [Define if you have the inttypes.h header file.]),
+ [AC_CHECK_TYPE(uint8_t, [unsigned char])
+  AC_CHECK_TYPE(uint16_t, [unsigned short])
+  AC_CHECK_TYPE(uint32_t, [unsigned int])])
+AC_C_BIGENDIAN
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS([getopt getopt_long])
+
+dnl Check for libtool.
+AC_PROG_LIBTOOL
+
+dnl Used for debugging purposes.
+dnl Make sure only one of these are being used.
+ZEN_OPTIONAL_CHECK_LIB(dmallocth, main, enable,
+    [     Look for and use libdmallocth, used for debugging])
+if test "x$ac_cv_lib_dmallocth_main" != "x"
+then
+    DEBUG_LIBS="-ldmallocth"
+    AC_CHECK_HEADERS([dmalloc.h])
+fi
+if test "x${DEBUG_LIBS}" = "x"
+then
+    ZEN_OPTIONAL_CHECK_LIB(ccmalloc, main, enable,
+        [      Look for and use libccmalloc, used for debugging])
+    if test "x$ac_cv_lib_ccmalloc_main" != "x"
+    then
+        DEBUG_LIBS="-lccmalloc"
+    fi
+fi
+if test "x${DEBUG_LIBS}" = "x"
+then
+    ZEN_OPTIONAL_CHECK_LIB(efence, main, enable,
+        [        Look for and use Electric Fence, used for debugging])
+    if test "x$ac_cv_lib_efence_main" != "x"
+    then
+        DEBUG_LIBS="-lefence"
+    fi
+fi
+
+dnl Checks for special network libraries.
+AC_CHECK_FUNCS(socket, , [AC_CHECK_LIB(socket, socket)])
+AC_CHECK_FUNCS(gethostbyname, , [AC_CHECK_LIB(nsl, gethostbyname)])
+
+dnl Checks for libraries.
+AC_CHECK_FUNCS(dlopen, , [AC_CHECK_LIB(dl,dlopen, ,
+    [AC_MSG_ERROR([
+*** Zen does not function properly without dlopen.])])])
+AC_CHECK_LIB(pthread,pthread_create, ,
+    [AC_MSG_ERROR([
+*** Zen does not function properly without libpthread, sorry.])])
+
+dnl Is this pthread library GNU pth? (GNU pth is non-preemptive)
+AC_CACHE_CHECK([whether pthread is GNU pth],[zen_cv_lib_pth],
+			[AC_EGREP_CPP(wehavegnupth,[
+#include <pthread.h>	
+#ifdef _POSIX_THREAD_IS_GNU_PTH
+wehavegnupth
+#endif],zen_cv_lib_pth=yes,zen_cv_lib_pth=no)])
+
+if test "x${zen_cv_lib_pth}" = "xyes"
+then
+    AC_DEFINE([HAVE_GNU_PTH], 1, [Define if pthread library is GNU pth.])
+fi
+
+dnl Check for image processing libraries.
+AVAILABLE_IMAGE=
+AVAILABLE_IMAGE_OBJECTS=
+ZEN_OPTIONAL_CHECK_LIB(jpeg, jpeg_start_decompress, disable,
+    [         Do not use the JPEG decoding library],
+    [AVAILABLE_IMAGE="${AVAILABLE_IMAGE} libjpeg"
+     LIBS="${LIBS} -ljpeg"
+     AC_DEFINE([HAVE_LIBJPEG], 1,
+               [Define if you have the jpeg library '-ljpeg'.])])
+
+ZEN_OPTIONAL_CHECK_LIB(png, png_read_row, disable,
+    [          Do not use the PNG decoding library],
+    [AVAILABLE_IMAGE="${AVAILABLE_IMAGE} libpng"
+     LIBS="${LIBS} -lpng"
+     AC_DEFINE([HAVE_LIBPNG], 1,
+               [Define if you have the png library '-lpng'.])])
+
+dnl We have two options here, to use the libungif library, or to
+dnl use the giflib library. We prefer libungif, because it is the
+dnl more free of the two, patent wise.
+ZEN_OPTIONAL_CHECK_LIB(ungif, DGifOpenFileHandle, disable,
+    [        Do not use the GIF decoding library],
+    [AVAILABLE_IMAGE="${AVAILABLE_IMAGE} libungif"
+     LIBS="${LIBS} -lungif"
+     AC_DEFINE([HAVE_LIBUNGIF], 1,
+               [Define if you have the ungif library '-lungif'.])],
+  [ZEN_OPTIONAL_CHECK_LIB(gif, DGifOpenFileHandle, disable,
+       [          Do not use the GIF decoding and encoding library],
+       [AVAILABLE_IMAGE="${AVAILABLE_IMAGE} libgif"
+        LIBS="${LIBS} -lgif"
+        AC_DEFINE([HAVE_LIBGIF], 1,
+                  [Define if you have the gif library '-lgif'.])])])
+
+old_CPPFLAGS=${CPPFLAGS}
+
+dnl Check if one or more of the above image handlers could not be
+dnl found. If that is the case, we look for libMagick.
+if test "${AVAILABLE_IMAGE}" != " libjpeg libpng libgif" \
+   && test "${AVAILABLE_IMAGE}" != " libjpeg libpng libungif"
+then
+  magick_force="force"
+fi
+
+ZEN_CHECK_LIBMAGICK([${magick_force}], ,
+    [AVAILABLE_IMAGE="${AVAILABLE_IMAGE} libMagick"
+     AC_DEFINE([HAVE_LIBMAGICK], 1,
+               [Define if you have the Magick library '-lMagick'.])
+     AC_CHECK_HEADERS([magick/api.h], ,
+         [AC_CHECK_HEADERS([magick/magick.h], ,
+             [AC_CHECK_HEADERS([magick.h])])])], 
+    AC_MSG_WARN([libMagick will not be used for image processing.]))
+AC_SUBST(MAGICK_CFLAGS)
+
+CPPFLAGS=${old_CPPFLAGS}
+
+AC_PATH_X
+if test "x$no_x" = "x"
+then
+    CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+    LDFLAGS="${LDFLAGS} -L${x_libraries}"
+fi
+
+dnl Check for interface specific libraries.
+dnl These libraries should not be linked with the main program, even
+dnl if they are found. Because of that, we save the old LIBS and CFLAGS
+dnl and restore them after the user interface specific checks. We also
+dnl clear LIBS, because the user interface specific libraries should
+dnl not be compiled with the regular libraries anyway, and if there is
+dnl a general error outside the user interfaces, it should not inflict
+dnl on them. 
+old_LIBS=${LIBS}
+old_CFLAGS=${CFLAGS}
+LIBS=
+
+m4_ifdef([AM_CHECK_LIBOFBIS],
+         [AM_CHECK_LIBOFBIS([0.1.0], ,
+          AC_MSG_WARN([oFBis user interface will not be used.]))],
+         AC_MSG_WARN([oFBis user interface not available will not be used.]))
+
+LIBS=
+CFLAGS=${old_CFLAGS}
+
+m4_ifdef([AM_PATH_GLIB],
+         [AM_PATH_GLIB([1.2.0], ,
+          AC_MSG_WARN([GLIB will not be used.]), gthread)],
+         AC_MSG_WARN([GLIB not available will not be used.]))
+
+CFLAGS="${CFLAGS} ${GLIB_CFLAGS}"
+LIBS="${LIBS} ${GLIB_LIBS}"
+
+m4_ifdef([AM_PATH_GTK],
+         [AM_PATH_GTK([1.2.0], ,
+          AC_MSG_WARN([GTK+ user interface will not be used.]),
+          gthread)],
+         AC_MSG_WARN([GTK+ user interface not available will not be used.]))
+
+LIBS=
+CFLAGS=${old_CFLAGS}
+
+AC_ARG_ENABLE(curses-interface, 
+    [  --enable-curses-interface
+                          Compile the curses interface, experimental],
+    [
+AC_CHECK_LIB(curses, initscr, ,
+	     [AC_CHECK_LIB(ncurses, initscr)])
+AC_CHECK_HEADER([curses.h], , [AC_CHECK_HEADER([ncurses.h])])
+CURSES_LIBS=${LIBS}
+     ])
+
+AC_ARG_ENABLE(psdump-interface, 
+    [  --disable-psdump-interface
+                          Do not compile the PostScript dump interface],
+    USE_PSDUMP=${enableval},
+    USE_PSDUMP=yes
+)
+
+LIBS=${old_LIBS}
+CFLAGS=${old_CFLAGS}
+
+dnl Set the directory where user interface libraries will be installed.
+UIDIR=${libdir}/zen/${VERSION}
+AC_SUBST(UIDIR)
+
+dnl Decide which user interfaces we are able to build.
+AVAILABLE_UI="dump"
+if test "x${OFBIS_LIBS}" != "x"
+then
+    AVAILABLE_UI="${AVAILABLE_UI} ofbis"
+    AC_SUBST(OFBIS_CFLAGS)
+    AC_SUBST(OFBIS_LIBS)
+fi
+if test "x${GTK_LIBS}" != "x"
+then
+    AVAILABLE_UI="${AVAILABLE_UI} gtk"
+    GTK_CFLAGS="${GTK_CFLAGS} ${GLIB_CFLAGS}"
+    GTK_LIBS="${GTK_LIBS} ${GLIB_LIBS}"
+    AC_SUBST(GTK_CFLAGS)
+    AC_SUBST(GTK_LIBS)
+fi
+if test "x${CURSES_LIBS}" != "x"
+then
+    AVAILABLE_UI="${AVAILABLE_UI} curses"
+    AC_SUBST(CURSES_LIBS)
+fi
+if test "x${USE_PSDUMP}" = "xyes"
+then
+    AVAILABLE_UI="${AVAILABLE_UI} psdump"
+fi
+
+dnl Export the available variables to the Makefiles.
+AC_SUBST(AVAILABLE_UI)
+AC_SUBST(AVAILABLE_IMAGE)
+AC_SUBST(DEBUG_LIBS)
+AC_SUBST(sysconfdir)
+
+dnl Print out some information about how the compilation will
+dnl be performed.
+AC_MSG_CHECKING([which interfaces that will be used])
+if test "x${AVAILABLE_UI}" != "x"
+then
+    AC_MSG_RESULT(${AVAILABLE_UI})
+else
+    AC_MSG_RESULT(none)
+fi
+AC_MSG_CHECKING([which image handlers that will be used])
+if test "x${AVAILABLE_IMAGE}" != "x"
+then
+    AC_MSG_RESULT(${AVAILABLE_IMAGE})
+else
+    AC_MSG_RESULT(none)
+fi
+
+AC_MSG_CHECKING([which compiling flags that will be used])
+AC_MSG_RESULT(${WARNING_CFLAGS} ${OPTIMISE_CFLAGS} ${PROFILE_CFLAGS})
+
+AC_MSG_CHECKING([which debugging library that will be used])
+if test "x${DEBUG_LIBS}" != "x"
+then
+    AC_MSG_RESULT(${DEBUG_LIBS})
+else
+    AC_MSG_RESULT(none)
+fi
+
+AC_CONFIG_FILES([
+	Makefile
+	src/Makefile
+	src/common/Makefile
+	src/ui/Makefile
+	src/ui/dump/Makefile
+	src/ui/ofbis/Makefile
+	src/ui/gtk/Makefile
+	src/ui/curses/Makefile
+	src/ui/psdump/Makefile
+	src/ui/progress_logo/Makefile
+	src/parser/Makefile
+	src/layouter/Makefile
+	src/protocol/Makefile
+	src/image/Makefile
+	doc/Makefile
+])
+
+AC_OUTPUT
+

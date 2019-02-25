@@ -1,0 +1,34 @@
+Zen - The web browser of Your choice!
+---
+
+Zen is a long term project, which will only be written to when the
+author or authors are in the mood for it. As the creator, I have a few
+requests regarding the coding style and style of other texts involved
+in the Zen project.
+
+
+Coding style
+------------
+
+Indentation is to be two characters, for this is what I am used to and
+find suitable for myself.
+
+All functions and struct will have a comment above them, written in
+the style of Javadoc. Have a peek at the functions and structs that
+are already written to see how to write these. I will begin another
+project within reasonable time, that will be a program to parse these
+comments and create HTML pages from them, unless I can find a program
+that does this in a good way.
+
+
+Other styles
+------------
+
+All texts included in the Zen package will be written without
+abbreviations. 
+
+
+Thank you for respecting my wishes,
+
+Tomas Berndtsson, tomas@nocrew.org, http://tomas.nocrew.org/
+

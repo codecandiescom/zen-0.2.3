@@ -1,0 +1,20 @@
+If you are an administrator of a webserver running Roxen, you can add
+the following rows to your client support descriptions. This is used
+when the creator of a webpage uses the RXML tag <if supports=...>.
+
+The current implementation of Zen should use these rows in your local
+supports database file:
+
+#section zen {
+.*              -frames, -forms -mailto, center
+.*dump.*        -font, -tables, -images
+.*ofbis.*       font, fontcolor, tables, images, bigsmall,\
+                jpeginline, pnginline, gifinline, supsub,\
+                tablecolor
+.*GTK.*         font, fontcolor, tables, images, bigsmall,\
+                jpeginline, pnginline, gifinline, supsub,\
+                tablecolor
+# }
+
+When you have updated the database, you have to flush the memory
+cache in Roxen, to get the pages to register the update.

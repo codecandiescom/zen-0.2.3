@@ -1,0 +1,49 @@
+ ____  _____ _    ,
+/_   \/  __// \  /|
+ /   /|  \  | |\ ||
+/   /_|  /_ | | \||
+\This/is_Zen,_the\web browser of Your choice.
+
+
+
+Background
+
+  I am a big fan of Lynx, and use it much. I used to like Netscape,
+  but the more it has been developed, the larger it has become, and
+  the more bugs it has. Frustrations sneaks up on you while you sit
+  there and try to make the flashing animations and annoying frames
+  to work as you like. It will not happen. 
+
+  I still felt that it is sometimes nice to have images in the page
+  but I do not want to have to run X, especially not on the Falcon,
+  a 16MHz Atari. Having already made a framebuffer library and with
+  it an image viewer, the step was not far for us to make a browser
+  which also used the framebuffer library, oFBis. 
+
+  When I started thinking about how to make a browser in a way that
+  would combine the simple interface of Lynx, but yet being able to
+  show images, I decided to separate the user interface as far as I
+  could from the rest of the code, which makes it easy to implement
+  several different interfaces on the same browser, and letting You
+  choose the interface or Your choice. 
+
+
+Future
+
+  What You make of it.
+
+
+Legalities
+
+  Zen is distributed under the terms of GNU General Public Licence.
+  Read more in the file COPYING which comes with this distribution.
+
+  Zen is released as-is, with no warranty. The authors are never in
+  any way responsible for how You choose to use Zen, nor what it is
+  doing to You or Your computer system.
+  
+
+
+
+Tomas Berndtsson <tomas@nocrew.org>
+  

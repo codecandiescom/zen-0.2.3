@@ -1,0 +1,256 @@
+.TH ZEN 1 "20 February 2001" "Zen Version 0.2.1" ""
+.SH "NAME"
+zen, gzen, fbzen \- the web browser of Your choice.
+.SH "SYNOPSIS"
+zen [\fIOPTION\fR\|(S)] [URL]
+.SH "DESCRIPTION"
+.B Zen 
+is a web browser with support for different user interfaces. These 
+interfaces are given a simple API to the rest of the program, and
+then get the freedom to act in whatever way they find suitable. 
+.PP
+The idea for 
+.B Zen
+comes from combining the nice, simple interface of Lynx, and the
+ability to view images in the Linux framebuffer. This is because
+it is much faster on some older machines, than it would be to run
+it in X. With the flexibility of chosable interfaces, it is able
+to run in X, as well.
+.PP
+Two additional variant programs, 
+.B gzen
+and 
+.BR fbzen ,
+are available, to provide shortcuts to the GTK+ and the oFBis
+user interfaces, respectively. See \fBINTERFACES\fR below for more
+information.
+.SH "OPTIONS"
+.PP
+.B Zen
+accepts the following options:
+.TP
+.PD 0
+.BI \-i " name"
+.TP
+.PD
+.BI \-\^\-interface=name
+Select which user interface to use for this session. 
+(see \fBCONFIGURATIONS\fR and \fBINTERFACES\fR)
+.TP
+.PD 0
+.BI \-s
+.TP
+.PD
+.BI \-\^\-source
+Dump the object pointed to by \s-1URL\s0 on stdout.
+.TP
+.PD 0
+.BI \-c " file"
+.TP
+.PD
+.BI \-\^\-config=file
+Extra configuration file read after all other configuration
+files has been parsed, but before the other command line options
+are interpreted. This option can be used multiple times, and the
+configuration files will be parsed in the given order. 
+(see \fBCONFIGURATIONS\fR and \fBFILES\fR)
+.TP
+.PD 0
+.BI \-d
+.TP
+.PD
+.BI \-\^\-dump_config
+Do not load the page, but dump the current configuration 
+on stdout. This dumps the configuration after all configuration
+files, environment variables and command line options has been
+parsed. The dump is in a suitable format to be used as a 
+configuration file for Zen. 
+(see \fBCONFIGURATIONS\fR)
+.TP
+.PD 0
+.BI \-h
+.TP
+.PD
+.BI \-\^\-help
+Print a quick description of each command line option, as well 
+as the available user interfaces. Then exit.
+.TP
+.PD 0
+.BI \-V
+.TP
+.PD
+.BI \-\^\-version
+Print version and the available user interfaces. Then exit. 
+.PD
+.SH "CONFIGURATIONS"
+Configuration for Zen can be made from configuration files, 
+environment variables and command line options. All in all, 
+the configurations are processed in the following order:
+.TP 3
+.PD 0
+.RI 1.
+Default settings, hardcoded into the program.
+.TP 3
+.RI 2.
+Global main configuration file.
+.TP 3
+.RI 3.
+User main configuration file.
+.TP 3
+.RI 4.
+Extra configuration files, given on command line.
+.TP 3
+.RI 5.
+Environment variables.
+.TP 3
+.RI 6.
+Command line options. 
+.TP 3
+.RI 7.
+Global interface configuration file. 
+.TP 3
+.RI 8.
+.PD
+User interface configuration file. 
+.SH "ENVIRONMENT VARIABLES"
+.TP
+.PD
+.BI http_proxy
+If this environment variable is set, Zen will try to use the given
+URL as a proxy for HTTP requests. It should be in the format 
+"http://proxy:port/". 
+.TP
+.BI ZEN_INTERFACE
+This environment variable can be set to the name of an available user 
+interface. It will override the configuration files, but not the command
+line option \fB\-\^\-interface\fR. The symlinked program names, \fBgzen\fR 
+and \fBfbzen\fR, will override the environment variable, but not the
+command line option.
+.TP
+.BI ZEN_DEFAULT_PAGE
+This is the default page, if none is given on the command line. It will
+override any default page given in the configuration files. 
+.SH "INTERFACES"
+When compiled with all configuration options, 
+.B Zen 
+supports the following user interfaces:
+.TP
+.PD 0
+.BI dump
+A plain text dump interface, non-interactive
+.TP
+.BI ofbis
+A graphical framebuffer user interface, using the oFBis framebuffer 
+library.
+.TP
+.PD
+.BI gtk
+A graphical framebuffer user interface, using the GTK+ libraries.
+This interface is run in X.
+.PP
+The keys following below can be used to control the 
+.B oFBis
+user 
+interface in 
+.BR Zen .
+The mouse may also be used to select links.
+.TP
+.PD 0
+.RI 'a' 
+Scroll up 128 pixels
+.TP
+.RI 'A' 
+Scroll up 1 pixel
+.TP
+.RI 'z' 
+Scroll down 128 pixels
+.TP
+.RI 'Z'
+Scroll down 1 pixel
+.TP
+.RI 's'
+Scroll page up
+.TP
+.RI 'x'
+Scroll page down
+.TP
+.RI SPC
+Scroll page down
+.TP
+.RI TAB
+Unshifted: Move highlight to next link on page.
+.TP
+       Shifted: Move highlight to previous link on page.
+.TP
+.RI RET 
+Select highlighted link
+.TP
+.RI 'b' 
+Go back to previous page
+.TP
+.RI 'f'
+Go forward to next page
+.TP
+.RI 'r'
+Redraw the display
+.TP
+.RI 'g'
+Enter a new URL to go to
+.TP
+.PD
+.RI 'q'
+Exit Zen
+.SH "SEE ALSO"
+.TP
+.PD 0
+http://www.nocrew.org/software/zen/
+.TP
+http://osis.nocrew.org/ofbis/
+.TP
+.PD
+http://www.gtk.org/
+.SH "FILES"
+.TP 24
+.PD 0
+.I /etc/zen/main.conf
+Global main configuration file
+.TP 24
+.PD
+.I ~/.zen/main.conf
+User main configuration file
+.TP 24
+.PD 0
+.I /etc/zen/dump.conf
+Global dump interface configuration file
+.TP 24
+.PD
+.I ~/.zen/dump.conf
+User dump interface configuration file
+.TP 24
+.PD 0
+.I /etc/zen/ofbis.conf
+Global oFBis interface configuration file
+.TP 24
+.PD
+.I ~/.zen/ofbis.conf
+User oFBis interface configuration file
+.TP 24
+.PD 0
+.I /etc/zen/gtk.conf
+Global GTK+ interface configuration file
+.TP 24
+.PD
+.I ~/.zen/gtk.conf
+User GTK+ interface configuration file
+.SH "COPYRIGHT"
+Copyright \(co 2000, 2001 Tomas Berndtsson <tomas@nocrew.org>
+.BR
+Zen is distributed under the terms of GNU General Public Licence.
+Read more in the file COPYING which comes with this distribution.
+.SH "AUTHOR"
+.PD 0
+Tomas Berndtsson <tomas@nocrew.org>
+.TP
+Taylor C Carpenter <taylorcc@codecafe.com> 
+.TP
+(initial manpage)

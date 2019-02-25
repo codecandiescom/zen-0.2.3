@@ -1,0 +1,102 @@
+This will most likely be changed into a different format
+later. Perhaps HTML pages, so you can read it within Zen itself. But
+that is in the future. 
+
+Retrieval
+---------
+  The official web page for Zen is http://www.nocrew.org/software/zen/. 
+  There you can find information about the browser, and instructions 
+  about how to get the latest version, if this should not be the one.
+
+  
+Compiling
+---------
+  Run `./configure' followed by `make'. It is as simple as that. You
+  will need to install Zen to be able to run it. You can read general 
+  information about the options to the configure script in INSTALL, 
+  or by running it with argument --help.
+
+  You will not need the oFBis framebuffer library to compile, but 
+  you need it if you want to use the graphical part of Zen. 
+  More information oFBis this can be found at 
+  http://osis.nocrew.org/ofbis/. 
+
+  Another graphical interface is the GTK+ interface, which, of course,
+  needs GTK+ to compile. You can get this from http://www.gtk.org/. It
+  is very likely that your favorite Linux distribution have GTK+ 
+  libraries compiled for you already. Users of other operating systems \
+  may need to compile it themselves. 
+
+  To view images in Zen, you will also need additional libraries to
+  deal with different formats. Zen supports a number of libraries for
+  this: libjpeg, libpng, libungif (or giflib) and libMagick. Support
+  for libMagick is disabled by default, but can be enabled by giving
+  the configure script option --enable-Magick. LibMagick can handle
+  many different image formats, but the other three libraries are 
+  usually faster for their specific formats and they take less memory 
+  to use.
+
+
+Installing
+----------
+  Run `make install'. The default install directory is /usr/local/bin/
+  and for its interface libraries it is /usr/local/lib/zen/. To
+  install Zen in a different place, use the --prefix arguments to the
+  configure script. 
+
+
+Running
+-------
+  Zen supports direct files and requests using the HTTP protocol. 
+  To load a file in Zen, start with:
+
+  `zen page.html' or `zen file:///home/www/page.html'
+
+  To start with a remote page, use the HTTP protocol:
+
+  `zen http://www.nocrew.org/'
+
+  If you want to connect through an HTTP proxy, you can set the
+  environment variable `http_proxy' to `http://proxy:3128/', or with
+  your proxy's correct URL. 
+
+  The default user interface is the dump interface. To use a different
+  interface, set the environment variable ZEN_INTERFACE before running
+  Zen, or use the option -i (--interface). The currently supported 
+  interfaces are:
+
+    dump  - A plain text dump user interface.
+    ofbis - A graphical framebuffer user interface. You can read more
+            about this interface in ofbis-interface.txt.
+    gtk   - A graphical X user interface, using the GTK+ libraries.
+
+  Running Zen with option -h (--help) or -V (--version) will print out
+  the currently available interfaces in your compilation. 
+
+  Read the manpage for more information about command line options,
+  configuration files and environment variables you can use with Zen. 
+
+
+Programming
+-----------
+  If you would like to contribute to Zen, please read the file STYLES
+  for a short description of my coding style for this project. I can,
+  of course, not force you to follow it, only ask you to, but I will
+  restructure patches to my liking before they go into the main 
+  distribution.
+
+  For a description about how to write your own user interface for
+  Zen, please see the file interface.txt.
+
+
+Contact
+-------
+  If you want to contact the creator of Zen, you are very welcome
+  to mail him at tomas@nocrew.org. 
+
+
+
+                                "Experience is something you don't get 
+                                         until just after you need it."
+                                                            - Oliver's Law
+                    

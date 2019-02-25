@@ -1,0 +1,1122 @@
+2003-09-17  Tomas Skäre  <tomas@nocrew.org>
+
+	* New year, new name, same person. Almost.
+
+	* Changed version to 0.2.3 for release. 
+	
+	* Added autoconf/automake changes from
+	  Guillem Jover <guillem@debian.org>. 
+	  Zen now needs autoconf 2.57 and 
+	  automake 1.7. 
+
+	* Added some more changes in psdump from
+	  Magnus Henoch. Took a while to put them
+	  in. Sorry about that. 
+
+2002-07-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added PostScript dump interface by
+	  Magnus Henoch. Thanks a lot for this. 
+
+2002-06-25  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added patch from Magnus Henoch to
+	  fix HTTP redirection from servers
+	  that return relative path in the
+	  Location header. Thank you for that. 
+
+2001-05-02  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Remade the drawing methods in the 
+	  GTK+ interface. Instead of creating 
+	  widgets for absolutely everything, 
+	  we draw the texts and graphics directly
+	  on the layout display. Some things
+	  still need their own widgets, like
+	  links and form widgets. All this
+ 	  speeds up the GTK+ inteface quite
+	  a lot, which is good, since it was
+	  enormously slow before. Still not
+	  super fast, but at least better.
+
+	* Fixed bug in layouting forms inside 
+	  a table. They are now positioned 
+	  correctly. 
+
+2001-04-21  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Started to implement form support in
+	  the GTK+ interface. Currently, some
+	  widgets are drawn, but nothing is
+	  functional as forms yet. There are
+	  also some problem with checkboxes
+	  and radio buttons not being drawn
+	  correctly. Actually, they are not
+	  being drawn at all. 
+
+	* Fixed bug with tag parameters without
+	  a given value. Set it to the name of
+	  the parameter, if not given.
+
+	* Changed version to 0.2.2. 
+
+2001-04-13  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Save and restore scrolling positions
+	  in the GTK+ user interface, when 
+	  stepping back and forward and when 
+	  loading a new page. It is saved in 
+	  the interface_data structure of the
+	  page layout part. 
+
+2001-04-11  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* New state handling scheme, which 
+	  saves a name for each state that is
+	  pushed to the stack. When popping,
+	  the name is given, and it is possible
+	  to delete all states up to the one with
+	  the given name. This simplifies the
+	  state handling, as well as deals with
+	  nested tags better. Pure HTML errors
+	  will give a warning. These kinds of
+	  warnings will later be possible to 
+	  turn on and off in the settings.
+
+2001-04-04  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented a more generic URL handling
+	  and a function to split up a URL string
+	  into its different components. The
+	  struct is protocol_url, defined in
+	  protocol.h. 
+
+	* Added a new part and library, that I
+	  would like to call common. It will
+	  contain various functions that might
+	  be usable in various parts of the 
+	  program. Currently, it contains a
+	  function to encode data into a base64
+	  encoded string. 
+
+	* Added support for authorization
+	  through the URL, in the normal Netscape
+	  fashion. It seems to work. 
+
+2001-03-04  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented more real lists, ordered 
+	  and unordered. However, no symbols are
+	  printed in front of the list items, so
+	  there is no difference between them at
+	  this point. The implementation is to
+	  support different indentation offsets
+	  of the text. The current indentation
+	  offset is stored in the alignment
+	  state. 
+
+2001-03-03  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed the tag <em> to equal <i> 
+	  instead of <b>. 
+
+2001-02-21  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Released version 0.2.1.
+
+2001-02-20  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Updated manpage.
+
+2001-02-07  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed configure.in script to work 
+	  better with NetBSD. 
+
+2001-01-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed the settings structure to a 
+	  more generic one. This means there is
+	  only one function to set a value, and
+	  only one function to get a value. This
+	  is to be able to more easily add more
+	  settings types. 
+
+2001-01-14  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed all occurrances of index() to
+	  strchr() and all rindex() to strrchr()
+	  in order to be more POSIX compliant. 
+	  Rightfully pointed out by Michael 
+	  Pollard. 
+
+2001-01-07  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed version to 0.2.1.
+
+	* Define DEBUG in config.h, if configured
+	  with --enable-debug.
+
+	* Read interface specific configuration
+	  files, right after we initialize the
+	  user interface.
+
+	* Fixed bug that made the last line in
+	  a configuration file not to be read,
+	  if there was no ending new line.
+
+	* Moved default setting of interface
+	  specific values to the interface init
+	  function. 
+
+	* Provide helper functions for the user
+	  interfaces, to set the default values 
+	  of their settings.
+
+	* Fixed overflow bug in oFBis interface.
+	  Spotted by Michael Pollard. 
+
+2000-12-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Released version 0.2.0.
+
+2000-12-13  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Test compiled on an alpha, to ensure
+	  64-bit compatibility. The plain text
+	  and the GTK+ interfaces work. Some
+	  minor changes were made to remove
+	  warnings when compiling. 
+
+2000-12-12  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added support for GIF decoding using
+	  libungif or giflib. Libungif is preferred,
+	  but if it does not exist, we look for
+	  giflib. Their functionality should be
+	  the same, just that giflib can write
+	  images too, and therefore suffers from
+	  patent problems in some parts of the
+	  world.
+
+	* The support for libMagick is now disabled
+	  by default, since we have direct support
+	  for JPEG, PNG and GIF. It can still be
+	  used, if compiled with --enable-Magick.
+	  Not using libMagick makes the memory
+	  foot print drop by about 500KB.
+
+	* Fixed a bug dealing with URLs and 
+	  saving the base parts. 
+
+	* Changed version to 0.2.0.
+
+2000-12-09  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bug for reading user configuration
+	  file. It now actually finds the home
+	  directory for the user.
+
+	* Separated the progress logo from the
+	  GTK+ interface, to its own shared 
+	  library. It can then be loaded by the
+	  interface. A new configuration option,
+	  gtk_use_progress_logo, is added to
+	  let the user decide if it should be 
+	  used or not.
+
+	* Generate a header file, paths.h, 
+	  currently containing the path to where
+	  the shared libraries are installed. 
+
+	* Added user interface functions to 
+	  let the interfaces read configuration
+	  settings. 
+
+2000-11-20  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Released version 0.1.2.
+
+2000-11-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bug in the URL parsing, that 
+	  made URLs with colons in them to not
+	  work properly. 
+
+	* Made http_proxy a configuration 
+	  setting, and not only an environment
+	  variable. 
+
+	* Fixed mistake, so environment should
+	  override the extra configuration files
+	  given on the command line. 
+
+2000-11-14  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Make it possible to specify your own
+	  user agent identifier string, that will
+	  be sent to the HTTP servers when 
+	  requesting pages. It is encouraged not
+	  to use this option.
+
+	* Use mkstemp() to create a temporary
+	  file when decoding images with 
+	  libMagick.
+
+	* Some fixes to get rid of warnings
+	  when compiling on other systems. 
+
+2000-11-13  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed version to 0.1.2.
+
+	* Implemented configuration files, global 
+	  in /etc/zen/ and user in ~/.zen/. 
+
+	* Remade the settings struct into a linked
+	  list, and provide functions to set and 
+	  get settings from it. It is all squeezed
+	  into the new src/settings.c. 
+	  From configuration files, environment 
+	  variables and command line options, it
+	  all ends up in the settings struct. 
+
+	* New command line options -d 
+	  (--dump_config) to dump a configuration
+	  file, and -c (--config) to read an extra
+	  configuration file. 
+
+	* New environment variable, 
+	  ZEN_DEFAULT_PAGE, to specify the default
+	  page. 
+
+	* Updated documentation to match program. 
+
+2000-10-29  Tomas Berndtsson  <tomas@nopanic.nocrew.net>
+
+	* Released version 0.1.1.
+
+2000-10-26  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Add paragraphs before and after a 
+	  pre-tag. 
+
+	* Changed working version to 0.1.1. 
+
+	* Symbolic links, gzen and fbzen, are
+	  created when installing Zen. If they 
+	  are used to run the program, the GTK+
+	  and the oFBis interface, respectively, 
+	  are used as default, if nothing else 
+	  is specified by the -i option. 
+
+	* Updated the manpage with the latest
+	  new features. 
+
+2000-10-25  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented a plain text parser, which 
+	  basically puts the whole file between
+	  a <pre></pre> container tag. It is used
+	  for MIME version text/plain.
+
+	* Only use setjmp in pngs.c, if the used
+	  libpng is compiled with setjmp support.
+	
+2000-10-21  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Released version 0.1.0.
+	
+	* Fixed bug in PNG decoding for palette
+	  based displays. Mallocing too small
+	  space for colourmap.
+
+2000-10-14  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed a bug in dealing with interlaced
+	  PNG images. 
+
+	* Added percentage counters in the status
+	  field, when decoding JPEG and PNG images. 
+
+2000-10-13  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Increased the main version to 0.1.0, 
+	  and the version of the GTK+ interface
+	  to 0.0.2. 
+	
+	* Added direct support for PNG images, 
+	  using the libpng library. This further
+	  reduces the need for libMagick.
+
+	* Added support for libMagick 5.2.x.
+
+2000-10-10  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed the colour allocation in the GTK+ 
+	  interface. This fixes the colour problems
+	  that existed on 8-bit displays.
+	
+2000-08-07  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Store endian information in the user
+	  interface display struct, to convert
+	  truecolour images correctly on all
+	  displays. 
+
+2000-06-17  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Packaged for release 0.0.3.
+
+	* Fixed memory leak when converting
+	  character entities. 
+
+	* Added progress logo when creating a
+	  distribution package of Zen. 
+
+2000-06-06  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Use gdk_threads_enter() and 
+	  gdk_threads_leave(), to ensure that there
+	  is no conflicts between threads in the 
+	  GTK+ interface. This cures the problems
+	  with Xlib sequence errors that used to
+	  appear now and then. 
+
+	* Moved all GTK+ initialization into 
+	  gtkui_open(), from the init() function
+	  in the GTK+ interface. This is done,
+	  because we want all GTK+ in the interface
+	  thread, and not in the main thread. 
+
+2000-06-04  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added tags <i> and <address> for italic 
+	  text style. 
+
+	* Added <em> tag for making bold text. 
+
+	* Support different text styles in the GTK+
+	  interface. Font face is not yet supported, 
+	  but monospaced font, for example in the
+	  <pre> tag, will really get a monospaced
+	  font. 
+
+2000-06-03  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added image support for the GTK+ interface.
+
+	* Added an animated progress logo in the
+	  GTK+ interface, placed next to the buttons
+	  at the top. It animates when loading a page. 
+	  For those who do not know chinese, the sign
+	  stands for Zen Buddhism. 
+
+	* Use page identifiers when requesting pages
+	  from interactive user interfaces. The page
+	  identifiers are then used when polling for
+	  a page, or when getting the status text
+	  for the page. 
+	  Note that this is not yet fully implemented,
+	  which means multiple windows, and separate
+	  page loading is still not possible. I should
+	  have thought this through better from the
+	  start, really, but it is a little late for
+	  that now. 
+
+2000-05-23  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added table support in the GTK+ interface. 
+	  Since all layouting are done outside of the
+	  interface, we just draw what we are told to
+	  draw here, no big deal. 
+
+	* Fixed a few cosmetic bugs in the table
+	  layouting, when cellspacing was set to zero.
+
+	* Texts that should be underlined, are now
+	  also underlined in the GTK+ interface.
+
+2000-05-14  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Text links are now working in the GTK+ user
+	  interface. The code for it is so far local and
+	  specific for the text parts, but this might 
+	  change so there is a general link handling
+	  part, that handles both text and graphical
+	  links. Selection of links can only be done
+	  using the mouse at this point. 
+
+	* Background colours are drawn in the GTK+
+	  user interface. 
+
+	* Cleaned up, and removed old functions left
+	  over when copying code from the oFBis interface
+	  which is not necessary for the GTK+ interface.
+
+	* The back and forward buttons in the GTK+
+	  interface are implemented. 
+
+2000-05-12  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented text and horizontal line drawing
+	  in the GTK+ user interface. Only one font face
+	  and font size is supported as of yet, but this
+	  will surely change later on. The GTK+ interface
+	  is actually getting useful.
+
+2000-05-10  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* After a long time of virtually nothing, I have
+	  now returned, and have started implementing a
+	  GTK+ user interface for Zen. Things look good, 
+	  it is a pretty easy API to use. At this moment,
+	  the interface is working up to the point that
+	  it requests a page, but nothing is rendered
+	  yet. I hope that this will not be too difficult
+	  a task, and that much of it can be provided
+	  already by the GTK+ library. 
+
+2000-03-13  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Even better check for libMagick. Now using the
+	  program Magick-config to figure out where the
+	  libraries and include files can be found.
+
+	* Support libMagick 5.x API.
+
+	* The CVS version does no longer contain premade
+	  Makefile.in, configure and other similar files.
+	  They are instead created by the script autogen.sh
+	  which is supposed to be used to configure Zen.
+	  Distributions will still have the necessary
+	  files.
+
+2000-03-09  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added support for relative width in table cells. 
+	  These are done with <td width="2*"> syntax. The
+	  relative widths have the lowest priority, and is
+	  only used when the width cannot be figured out
+	  any other way.
+
+	* Better checking for libMagick in the configure.
+
+2000-02-24  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Use uintX_t instead of u_intX_t all over the
+	  program. This is because uintX_t is in the ISO-C
+	  9X standard, and u_intX_t is not.
+
+	* Fixed with type checking, and minor changes to
+	  compile in Solaris. The plain text dump interface
+	  works. Next porting session will be for MiNT on
+	  Atari.
+
+2000-02-07  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed the user interface operation get_text_width
+	  into a more generic set_size, which sets the width
+	  and height for some part types. This now takes care
+	  of the previous text width, and will take care of
+	  the width and height of some form widgets, which 
+	  only the user interfaces can know the sizes of.
+
+	* Started implementing forms. The frameworks of forms
+	  and submit buttons are created, but none of it
+	  actually do anything yet. On the other hand, it
+	  does not interfere with the rest of the program 
+	  either. 
+
+2000-02-05  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Separated JPEG image handling to work directly
+	  against libjpeg, to improve speed and quality for
+	  JPEG images. 
+
+	* The image handlers are no longer needed to compile
+	  Zen. If only libjpeg is found, only JPEG images 
+	  will work. If only libMagick is found, all images
+	  are supported, but being slightly slower on JPEG
+	  images. If none of them are found, no images are
+	  loaded. 
+
+	* Support connection through an HTTP proxy. Use by
+	  settings the environment variable `http_proxy'.
+
+2000-01-26  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed version for Zen and the oFBis user 
+	  interface to 0.0.2, to make it ready for a 
+	  second public release.
+
+2000-01-25  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Make it possible to set a mark in the linked list
+	  of states, which is used for tables, so that the 
+	  state changes inside a table does not affect the 
+	  original state, after the table.
+
+2000-01-22  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added support for different widths of fonts. This
+	  is done by asking the user interface what the width 
+	  of a specific text with specific text styles will
+	  be.
+
+	* Added support for aligning in a div-tag.
+
+2000-01-20  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented support for using table cell width,
+	  if it is specified in the HTML file.
+
+2000-01-16  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bugs which sometimes aligned tables twice.
+
+2000-01-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Scroll using bitblt in the oFBis user interface,
+	  and only redraw what needs to be redrawn.
+
+	* Fixed bug which made whole pages go away if there
+	  was a <!DOCTYPE...> tag, which was interpreted as
+	  a comment tag.
+
+2000-01-09  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bugs in table handling. Again.
+
+	* Better background colour handling in tables. Only
+	  the actual table cells are filled with colour. 
+	  This is how Netscape does it.
+
+2000-01-08  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented cellpadding and cellspacing in tables.
+
+	* Implemented background colour in tables and table
+	  cells.
+
+	* Recognise some basic colours by name.
+
+	* More character entities supported. Some special
+	  which were not part of the indices 160-255 of
+	  ISO-8859-1.
+
+	* Fixed various bugs in the table handling, and
+	  layouting.
+
+2000-01-06  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented support for tables. They are not yet
+	  complete, and might not always work. In fact, pages
+	  that previously worked might now crash. This will 
+	  be fixed shortly. 
+
+	* Tables are supported by the oFBis user interface.
+
+	* Various bugfixes has been made.
+
+	* Rowspan in table cells supported a little later.
+
+	* Implemented character entity conversion. Those are
+	  &nbsp; and all those.
+
+2000-01-04  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bug in aligning parts which were child parts
+	  to links.
+
+2000-01-02  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added possibility to compile with Electric Fence, 
+	  which is another malloc debugging library. This is
+	  enabled with --enable-efence to the configure script
+	  and may not be used at the same time as ccmalloc.
+
+	* Added basic support for tables. It still looks the 
+	  same way as before, with paragraphs and whitespace,
+	  but the layout part structure is there, ready to be
+	  fully supportive.
+
+1999-12-29  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added possibility to compile with libccmalloc, using
+	  configure option --enable-ccmalloc. This is used to 
+	  help prevent memory leaks and/or overwrites.
+	  All memory leaks seems to have been removed from Zen
+	  now. LibMagick seems to have some leaks, but that is
+	  nothing I can prevent.
+
+	* Shifted commands 'a' and 'z' in the oFBis user interface
+	  scrolls only one pixel in each direction.
+
+1999-12-28  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed bug when drawing, or not drawing some parts which 
+	  might, or not might be outside the display.
+
+	* Treat all unknown return codes as 404 in HTTP request.
+
+1999-12-23  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Make clipping work on images. It was annoying that 
+	  large images were not shown at all.
+
+1999-12-16  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added key command 'g' in the oFBis user interface, to
+	  be able to enter a new URL to go to, without quitting
+	  the program. 
+
+1999-12-15  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added progress status, which is printed in the control
+	  field in the oFBis user interface. 
+
+	* Take care of host relocation through HTTP codes 301
+	  and 302. 
+
+	* Simplify protocol_http_open() by extracting the actual
+	  request sending into its own function.
+
+1999-12-12  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Changed version to 0.0.1, ready for a release.
+
+	* Check for libofbis in the configure script, and do not
+	  compile the oFBis user interface, if it cannot be found.
+
+	* Support the script-tag in such a way that the script
+	  is completely ignored. 
+
+1999-12-05  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented threading for interfaces which support
+	  interaction. The main thread just waits for the
+	  interface to finish right now. The interface thread
+	  make requests to get a new page using helper functions
+	  provided by the generic user interface. This then
+	  starts a new thread when loading the new page, and the
+	  interface polls now and then to see if the new page is
+	  finished.
+
+	* New key command 'r' in the oFBis user interface to 
+	  redraw the current page.
+
+Fri Nov 26 23:36:56 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Put new pages into the linked list, right after the
+	  current page, instead of at the end, as it was before.
+
+Thu Nov 25 21:02:31 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Strip double slashes, slash dots and slash dot dots
+	  from URLs before using them.
+
+	* Support base-tag, to be able to view the images
+	  on the httptunnel webpage.
+
+Thu Nov 18 20:27:50 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed truecolour handling so that it actually works.
+
+	* Added a control field at the top of the oFBis user
+	  interface display, a grey area where currently the
+	  title and the URL is written.
+
+	* Link URLs are being printed in the control field
+	  when they are highlighted.
+
+Tue Nov 16 18:31:45 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Accept headers from faulty HTTP servers, which does
+	  not conform to the HTTP standard by only sending LF
+	  after lines in the header, where the standard says
+	  a CRLF should be sent.
+
+Sun Nov 14 01:54:25 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Handle active links, by changing colour of the links
+	  if the mouse pointer comes on them. It is also
+	  possible to move the currently choosen link with
+	  TAB and Shift+TAB, and select the link by pressing
+	  Return.
+
+	* Changed the method for calculating the default 256
+	  colour palette into something I believe would give
+	  a better selection of colours, even though I have
+	  yet to prove this to the common people.
+
+	* Protocol opening function and related ones now 
+	  accept a referer URL, although it is not yet sent to
+	  the server. It is used to find the correct URL on
+	  pages not being the last opened page.
+
+	* Scrolling of parts in the oFBis user interface is
+	  handled more correctly.
+
+Sat Nov 13 01:34:19 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* The oFBis user interface is now able to scroll the
+	  page, and also to step between previously loaded
+	  pages.
+
+Thu Nov 11 23:01:32 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Some bugfixes with the mouse pointer, and image
+	  parsing which did not work.
+
+Wed Nov 10 23:15:17 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* The oFBis interface is now interactive, with a simple
+	  mouse pointer, which enables the user to click on
+	  links to follow them. Very primitive so far, but it
+	  works. Pressing 'q' exists the oFBis interface.
+
+	* The above means handling of links are implemented.
+
+Sun Nov  7 22:03:04 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Moved all rendering handling into the user interfaces.
+
+	* Let the user interfaces call a helping function,
+	  retrieve_page(), to get an object from a specified
+	  URL.
+
+	* The above two paragraphs are preparations for making
+	  interactive interfaces possible, although this is not
+	  yet implemented.
+
+Thu Nov  4 00:30:16 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed image reading to handle transparent images, 
+	  although they are not drawn as transparent yet.
+
+	* Changed the type LAYOUT_PART_TITLE into 
+	  LAYOUT_PART_PAGE_INFORMATION, to contain various
+	  information about the page, including the title. This
+	  now is always the first part of the linked list. It 
+	  also contains the background, text and link colours
+	  as specified in the body-tag, or default values.
+
+	* Simple list support, by setting row breaks when 
+	  bumping into li-tags. 
+
+Sun Oct 31 10:34:40 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed relative URLs to work. New base URLs are stored
+	  when an HTML page is being processed.
+
+	* Colours are correctly handled and the oFBis interface
+	  has the function ofbis_get_closest_colour() to find
+	  the best suiting colour index or value.
+
+	* Fixed bug with the center-tag. Moved its handling into
+	  the paragraph tag handler.
+
+	* When loading files, check the extension of the file to
+	  determine what type of file it is. Loading via HTTP,
+	  we get the type in the response from the server.
+
+Sat Oct 30 22:37:01 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented images using the libmagick library. Since
+	  relative URLs are not yet supported, there are not
+	  many images that are actually shown.
+
+	* Above paragraph should be larger, since it is indeed 
+	  a big step forward for Zen.
+
+Fri Oct 29 00:16:47 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added support for center-tag. 
+
+	* New files in src/image/ to handle image loading and
+	  converting. This is not yet implemented, but the main
+	  structure is there. 
+
+	* Added type of interface in the user interface struct. 
+	  Added display struct in there too, and moved the width
+	  and height settings inside that.
+
+Wed Oct 27 23:25:41 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented two new command line options:
+	  -i (--interface) for setting the interface to use,
+	  -s (--source) to dump the source from the stream.
+	  A new file, src/settings.h, added for this reason.
+
+	* Fix a bug in the dump user interface to get the
+	  correct new lines at the correct places. 
+	
+Wed Oct 27 00:35:05 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented the pre-tag, and it actually worked on 
+	  the first try. Incredible. 
+
+	* Fixed so that it is possible to an URL like
+	  http://www.nocrew.org/software, and not having to
+	  add the extra slash at the end. Ignorant people do
+	  this, even if it is wrong. I am considering not
+	  to support it.
+
+Mon Oct 25 22:42:51 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Fixed a few bugs regarding the font size which 
+	  occurred in the handling of td and th-tags. 
+
+	* Tried to implement vertical alignment, but that did
+	  not look all that well, so it is commented out for 
+	  the time being.
+
+Sat Oct 23 20:59:43 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* New files src/protocol/http.c and src/protocol/http.h
+	  for handling the HTTP protocol. A simple getting of
+	  pages are possible. 
+
+	* Alignment of horizontal lines are corrected. 
+
+	* Align text and horizontal lines in the dump user
+	  interface by putting whitespace characters in front
+	  of the part.
+
+Mon Oct 18 01:53:18 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Added enough files in src/protocol/ to support file
+	  protocol.
+
+	* Use the protocol functions to open a stream. Now it
+	  does not need to read som stdin anymore, it can read
+	  files as well. 
+
+Sun Oct 17 19:27:03 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* New files src/parser/states.c and src/parser/states.h
+	  are used to keep track of text style and alignment
+	  states. Styles are put into the part from 
+	  parse_string_store_current() and alignments are put
+	  into the parts in layout_add_part().
+
+	* Changed the layout part list into a double linked one. 
+	  This is needed by the layouter to align parts.
+
+	* Added support for new tags: table, font, big, small.
+	  Table is not really supported, but only puts in a new
+	  paragraph. Font tag only supports changing the size.
+	  This, together with big and small tags, gives you a
+	  clue that different font sizes in general are supported.
+	  
+	* Paragraph and header tags now handle horizontal alignment.
+	  Different header tags gives different font sizes and 
+	  styles. 
+
+	* The oFBis interface handles different font sizes, 8, 
+	  14 and 16 pixels high. 
+
+	* Horizontal alignment is supported. 
+
+Fri Oct 15 00:33:51 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented support for bold and strong tags. This
+	  is drawn by the oFBis interface.
+
+Mon Oct 11 21:31:17 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Implemented a first, very basic interface for the
+	  framebuffer, using the oFBis library. Things are
+	  pretty hard coded so far, in where to look for the
+	  header files, and things like that. A check for
+	  oFBis will soon be placed within the configure.in.
+	  The oFBis interface is in src/ui/ofbis/.
+
+	* Added basic support for underline and anchor tag. 
+	  The anchor tag does not yet provide a link, but only
+	  makes the text underlined, and in a different colour.
+
+	* Image size is read from the tag, if available.
+	  Otherwise, they are set to 16 times 16 pixels by the
+	  layouter.
+
+	* Fixed bugs in the layouter when handling the text, and
+	  finding out how and when to cut them.
+
+	* Added layout part type LAYOUT_PART_DELETED, to be able
+	  to easily mark a part as deleted, but not really do it.
+	  This is much easier and quicker than to actually delete
+	  it, and does not take up much extra memory.
+
+	* The user can now choose what user interface to use with 
+	  the help of the environment variable ZEN_INTERFACE. The
+	  default interface is "dump".
+
+	* Added an interface specific pointer in the zen_ui struct.
+
+	* Changed parse_string_store_current() to return a pointer
+	  to the layout part it stored the text into. This to let
+	  the parser set specific attributes of the part.
+
+Thu Oct  7 21:42:52 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Made the dump user interface into a shared library, 
+	  which is then loaded by the generic user interface
+	  initialization routine. Modularization is the way
+	  to go.
+
+Wed Oct  6 23:59:41 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* New file: src/layouter/layout.c that does the layouting
+	  of the parts collected by the parser. 
+
+	* New file: src/ui/dump/dump_title.c that prints the
+	  title for the dump user interface. 
+
+	* src/parser/helpers.c: parse_string_trim() trims the
+	  internal string from whitespace characters, and is used
+	  before putting the string into a layout part.
+
+	* src/ui/control.c: Set default values in the user
+	  interface struct before calling the user interface init
+	  routine.
+
+	* src/ui/zen_ui.h: Separate support values into its own
+	  struct to make things easier to read.
+
+	* src/ui/dump/*.c: Adjust to conform to the values the 
+	  layouter puts into the layout parts.
+
+	* Handle and print out the title of the page. It always
+	  comes first.
+	
+Sat Oct  2 12:54:13 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* User interfaces are now used. Currently only a small
+	  version of a plain text dump user interface is supported,
+	  but more will come as time goes.
+
+	* src/ui/dump/ added, containing files to make up the
+	  dump user interface. 
+
+	* src/ui/control.c and src/ui/render.c takes care of the
+	  main user interface, which then finds and calls the 
+	  user interface the user has choosen to be used. 
+	  src/ui/ui.h and src/ui/zen_ui.h are used for structures
+	  and prototypes for all this.
+
+	* src/parser/tags.c: Moved parse_tag_store_current_string 
+	  to src/parser/helpers.c and renamed it to 
+	  parse_string_store_current, to conform with the parse
+	  string function naming.
+
+	* src/main.c: Call the user interface routines for 
+	  initialization and rendering of the parsed page. 
+
+	* src/parser/html.c: No longer call the layout printing
+	  routines, but let the user interface do that part.
+
+	* src/layouter/show.c: Removed, since the dump user
+	  interface does this work nowadays. 
+
+Wed Sep 29 23:58:01 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* src/layouter/layout.h: added structs for layout parts
+	  and prototypes for functions using it.
+	
+	* src/parser/tags.c: Added support for hr-tag, br-tag and 
+	  img-tag, plus the previously empty support for paragraph 
+	  and header tags. Moved header tag interpretation into its
+	  own tag function. Function parse_tag_store_current_string()
+	  will put the current string into the layout part list.
+
+	* src/parser/html.c: removed all printing code, and let the
+	  tag functions create the layout part list, which is then
+	  printed.
+	
+	* Created files src/layouter/build.c for building layout 
+	  parts linked lists and src/layouter/show.c for a quickly 
+	  implemented plain text dump function.
+
+Thu Jul 22 22:44:23 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Directory src/layout renamed to src/layouter.
+
+	* New files: 
+	  src/layouter/layout.h with structs and prototypes for
+	  handling layout parts.
+	  src/parser/tags.h contains the tag structs previously
+	  contained in src/parser/html.h.
+	  src/parser/tags.c contains functions which ar bound to
+	  the supported tags. Paragraph tags are added, but yet
+	  only with an empty function.
+
+	* src/parser/html.h: moved tag structs to src/parser/tags.h.
+
+	* src/parser/helpers.h, src/parser/helpers.c: added string 
+	  handling functions.
+
+	* src/parser/html.c: call tag functions binding when a tag
+	  has been found in the stream.
+
+	* New file STYLES added, containing information about how the
+	  source code and text files included in the package are to 
+	  be written.
+
+Mon Jun 28 23:12:41 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* src/parser/html.h, src/parser/helpers.h: changed function
+ 	  prototypes to be extern.
+	  
+	* src/parser/helpers.c: no longer convert everything into lower
+ 	  case, but only the tag and parameter names. Handle quoted
+ 	  parameter values correctly. Removed parse_remove_quotes(), which
+ 	  is no longer needed.
+
+	* src/parser/helpers.h: removed prototype for
+ 	  parse_remove_quotes().
+	
+Wed Jun  9 20:52:27 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* src/parser/html.h: added prototype for parse_html().
+
+	* src/parser/html.c: implemented parse_html().
+
+	* src/parser/helpers.c: parse_read_word(): convert read word into
+ 	  lower case.
+
+Wed May 19 00:05:57 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Imported Zen into the NoCrew CVS server.
+
+	* Removed src/parser/parse.c because I decided to let the MIME
+ 	  code determine the type of the document, and not the content of
+ 	  the data.
+
+	* Added src/parser/html.h with structs for tags and
+ 	  src/parser/helpers.c with helping functions to aid the parsing.
+
+Tue Mar 16 01:02:42 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* src/parser/parse.c and src/parser/html.c are created to build
+ 	  libparser.a. They do not do anything.
+
+Sun Mar 14 14:46:36 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Documentation of functions and other entities will be done in
+ 	  javadoc style.
+
+	* src/main.c has arised and Zen is now a complete Hello world
+ 	  program.
+
+Sun Mar 14 02:22:29 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Basic directory structure and configure files are in place.
+
+	* README: created and written into.
+
+Sat Mar 13 23:01:42 1999  Tomas Berndtsson  <tomas@nocrew.org>
+
+	* Zen has been created, the journey has begun.
+

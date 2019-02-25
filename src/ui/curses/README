@@ -1,0 +1,34 @@
+This is just to clarify some of the design descisions in this interface.
+
+First off, I took a fairly heavy Object like approach to this. I'm really
+bad for organizing code, and building in objects makes it easier. When you
+look in info.h you will see several structs, each has a corresponding C file
+which can be said to hold the member functions. Well, all do except
+curses_align and curses_link, which are handled by the code of the bigger
+structs there in.
+
+struct curses_interface is the big guy, and the code for it handles all the
+other parts of the interface. It calls the configuration functions, and
+corrodinates the various parts. It has one function, curses_interface_init,
+which sets default configuration values, and prepares the interface to be
+opened. The functions called here have to be called before init() exits,
+otherwise Zen's setting code will be unaware of the configuration options
+for the interface.
+
+The two things which can be configured are the looks and organization of the
+interface, and keybindings. Look at these two things carefully, there code
+exists in `curses_window.c' and `curses_key.c', respectivly. Note also
+that I still have trouble with colours and they are absent from all window
+code, makeing them a big priority. I'll likely have to abandon the idea of
+24 bit colours. Dang.
+
+The render code is part of `curses_page.c' since we're rendering pages,
+right? Same with scroll. I looked at the layouter code and saw that you keep
+an internal list of parts, and that the pages parts are persistant. If this
+is not the case I need to know, since pages store pointers to there own
+parts. They also store status information.
+
+That's all I can think of at the moment. Oh, I really do intend to improve the
+comments so they are more useful.
+
+Michael.

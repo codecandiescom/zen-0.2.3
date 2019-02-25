@@ -1,0 +1,80 @@
+This file contains some of my thoughts about the future 
+changes of Zen. They are listed in no particular order, and
+will be taken care of in a completely different order.
+
+- Only load the shared libraries when they are first needed. That is, 
+  if a page only contain JPEG images, Zen will only open libjpeg,
+  using libdl, and use it for decoding. This will then be loaded for
+  as long as Zen is running for the current session.
+
+- Support page location in URLs, specified with '#'.
+
+- Support USEMAP.
+
+- Support the different kinds of lists.
+
+- Set total number of bytes in the status bar, when available.
+
+- Support forms.
++ Started with the basic form tags in the GTK+ interface. 
+
+- Use more threads for images on a page to speed up the image
+  processing, possibly with some delay before starting the next
+  thread, so that it will not request all images at once. 
+  Limit the number of threads to use.
+
+- Terrorize and torture the people that made Netscape and MSIE
+  accept so many cases of really bad HTML.
++ Regarding MSIE, I guess it's torture enough for them to work
+  at Microsoft. And Netscape aren't doing too great either.
+
+- Create a generic content type handler, which will decide
+  what parser that will take care of the data.
+
+- Add a download link command.
+
+- Support background images, in the whole page, and in tables. 
+
+- Support frames, and provide a few alternatives in the 
+  configuration file, for example: real frames, frame list in
+  the same style as Lynx, or convert into static tables, as
+  w3m does.
+
+- Cache files retrieved with HTTP. To start with, only cache for
+  the current session, like Lynx does. Later, maybe save the
+  cached files between sessions, like Netscape. This is low
+  priority. Use a caching proxy instead.
+
+- Only store a <configuration value> number of prelayouted pages
+  in memory, and free the memory allocated for the older ones, 
+  but store the URL so it can be reloaded.
+
+- Support bookmarks, probably the easiest way would be to create
+  an HTML file located in a directory in the user's home directory.
+
+- Add user interface helper function to layout a page again. This
+  has to be done in order to create an interface with scalable 
+  display areas, for example an X window.
+
+- Implement FTP protocol support.
+
+- Fix the main program, so that it may be called more than once
+  at the same time. This is required to be able to request more
+  than one URL at a time. 
++ Started with introducing page identifiers. 
+
+- Make it possible to call an editor to edit the source of a page
+  and then reload it, to fix errors on the fly. Thanks Magnus for
+  this idea.
+
+- Activate or deactivate certain warnings from the configuration
+  files. This can be warnings like found HTML errors.
+
+- Make it possible to start rendering a page, before the whole
+  thing has been fully loaded.
+
+- How about a Postscript interface. Kind of like the plain text
+  dump interface, but creates a Postscript file instead. 
+
+
+Tomas Berndtsson, <tomas@nocrew.org>

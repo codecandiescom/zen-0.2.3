@@ -1,0 +1,27 @@
+The current version of oFBis only support palette based modes, or 16-
+and 32-bit truecolour. 24-bit is not implemented yet, and you can
+therefore not use this mode in Zen either.
+
+oFBis uses /dev/gpmdata by default, for controlling the mouse. You get
+this by starting gpm with argument "-R". It uses the busmouse
+protocol, which means it can talk directly to /dev/mouse for some
+architectures, for example Linux/PPC and Linux/m68k.
+
+The keys following below can be used to control the oFBis user
+interface in Zen. The mouse may also be used to select links.
+
+'a' - Scroll up 128 pixels
+'A' - Scroll up 1 pixel
+'z' - Scroll down 128 pixels
+'Z' - Scroll down 1 pixel
+'s' - Scroll page up
+'x' - Scroll page down
+SPC - Scroll page down
+TAB - Unshifted: Move highlight to next link on page.
+      Shifted: Move highlight to previous link on page.
+RET - Select highlighted link
+'b' - Go back to previous page
+'f' - Go forward to next page
+'r' - Redraw the display
+'g' - Enter a new URL to go to
+'q' - Exit Zen
